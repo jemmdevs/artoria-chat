@@ -166,7 +166,7 @@ body {
 @media (max-width: 640px) {
   .neo-container {
     width: 95% !important;
-    min-height: 80vh !important; /* Aumentado para que sea más alto */
+    min-height: 80vh !important;
     max-height: 95vh !important;
     margin: 0 auto !important;
     transform: rotate(0deg);
@@ -227,9 +227,9 @@ body {
 
   /* Ajuste para el área de mensajes en móvil */
   .chat-messages {
-    height: calc(75vh - 140px) !important; /* Aumentado para más espacio */
-    min-height: 300px !important; /* Aumentado para más espacio */
-    flex: 1 !important;
+    max-height: 60vh !important;
+    height: 60vh !important;
+    flex: 0 1 auto !important;
     overflow-y: auto !important;
     padding: 10px !important;
   }

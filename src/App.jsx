@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "../supabaseClient";
 
 function App() {
@@ -6,6 +6,15 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [usersOnline, setUsersOnline] = useState([]);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -47,7 +56,6 @@ function App() {
     });
     roomOne.on("broadcast", { event: "message" }, (payload) => {
       setMessages((prevMessages) => [...prevMessages, payload.payload]);
-      console.log(messages);
     });
 
     //track user presence subscribe!
@@ -69,7 +77,7 @@ function App() {
     return () => {
       roomOne.unsubscribe();
     };
-  }, [messages, session]);
+  }, [session]);
 
   //send message
 
@@ -179,7 +187,7 @@ function App() {
             </div>
           </div>
           {/**main chat */}
-          <div className="p-4 flex flex-col overflow-y-auto flex-grow chat-messages">
+          <div className="p-4 flex flex-col overflow-y-auto flex-grow chat-messages" style={{ maxHeight: "calc(100vh - 250px)" }}>
             {messages.map((msg, idx) => {
               // Format timestamp
               const timestamp = msg.timestamp ? new Date(msg.timestamp) : new Date();
@@ -226,6 +234,7 @@ function App() {
                 </div>
               );
             })}
+            <div ref={messagesEndRef} />
           </div>
           {/**message input */}
           <form
